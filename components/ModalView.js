@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   TextInput,
@@ -10,8 +10,26 @@ import {
   Image,
   SafeAreaView,
 } from 'react-native';
+import BottomButton from './BottomButton';
 
 const ModalView = ({visible, onClose}) => {
+  const [enteredRemainder, setEnteredRemainder] = useState('');
+
+  const remainderInputHandler = enteredText => {
+    setEnteredRemainder(enteredText);
+  };
+
+  const [remainders, setRemainder] = useState([]);
+
+  const addRemaindersHandler = reaminderName => {
+    if (reaminderName !== '') {
+      setRemainder(currentRemainder => [
+        ...currentRemainder,
+        {key: Math.random().toString(), value: reaminderName},
+      ]);
+    }
+  };
+
   return (
     <Modal visible={visible} animationType="slide">
       <SafeAreaView>
@@ -29,13 +47,10 @@ const ModalView = ({visible, onClose}) => {
               style={styles.textinput}
               placeholder="What do you want to remainded about?"
               placeholderTextColor="#85929E"
+              onChangeText={remainderInputHandler}
             />
           </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} activeOpacity={0.5}>
-              <Text style={{color: 'white'}}>New Task</Text>
-            </TouchableOpacity>
-          </View>
+          <BottomButton onNewTask={addRemaindersHandler} />
         </View>
       </SafeAreaView>
     </Modal>
@@ -53,20 +68,7 @@ const styles = StyleSheet.create({
     padding: 10,
     color: '#2C3E50',
   },
-  button: {
-    width: '40%',
-    position: 'absolute',
-    height: 50,
-    bottom: 96,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 30,
-    backgroundColor: '#0375FF',
-  },
-  buttonContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
+
   modalContainer: {
     flexDirection: 'column',
     alignItems: 'center',
